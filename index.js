@@ -6,8 +6,14 @@ var defaults     = require('lodash').defaults;
 
 module.exports = {
   name: 'ember-cli-autoprefixer',
-  included: function(app, parentAddon) {
-    this.app = app;
+  included: function(parent) {
+    while (!this.app && parent) {
+      if (parent.app) {
+        this.app = parent.app;
+      } else {
+        parent = parent.parent;
+      }
+    }
     this.options = defaults(this.app.options.autoprefixer || {}, {
       enabled: true
     });
